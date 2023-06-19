@@ -1,1 +1,8 @@
 {% extends 'forumFunctional/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>About</h1>
+    <p class="about">DigiForum is a discussion platform with anyone, anywhere, and you can say anything #FreeSpeech</p>
+    <img src="{% static 'forumFunctional/images/about.png' %}" alt="About" class="about-img">
+{% endblock %}

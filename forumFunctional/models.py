@@ -53,7 +53,7 @@ class Post(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        verbose_name='Category id',
+        verbose_name='Name of category',
         blank=True,
         null=True
     )
@@ -77,7 +77,7 @@ class Post(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='User id'
+        verbose_name='Username'
     )
 
     class Meta:

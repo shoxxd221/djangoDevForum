@@ -7,7 +7,7 @@ from .views import *
 
 urlpatterns = [
     path('', ForumView.as_view(), name='home'),
-    path('categories', Categories.as_view(), name='categories'),
+    path('categories/', Categories.as_view(), name='categories'),
     path('category/<slug:category_slug>/', ShowCategory, name='category'),
     path('category/<slug:category_slug>/<slug:post_slug>/', ShowPost, name='post'),
     path('login/', Login.as_view(), name='login'),

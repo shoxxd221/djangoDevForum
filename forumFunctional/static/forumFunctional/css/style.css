@@ -36,6 +36,12 @@ main{
     display: flex;
     flex-direction: row;
 }
+h1{
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    margin-top: 30px;
+}
 .logo{
     margin-top: 20px;
     margin-left: 35px;
@@ -217,7 +223,7 @@ button{
 .registration-form{
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     margin-top: 40px;
     margin-left: 320px;
     font-family: 'Poppins', sans-serif;
@@ -275,4 +281,78 @@ button{
 .see-more:hover{
     color: cadetblue;
     transition: 0.5s;
+}
+.about{
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    width: 300px;
+    margin-left: 290px;
+    margin-top: 10px;
+}
+.about-img{
+    margin-top: 30px;
+    padding-left: 40px;
+}
+.add-category-form{
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    color: rgb(193, 154, 154);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    text-align: left;
+    margin-left: 350px;
+}
+.add-category-form input{
+    display: flex;
+    margin-top: 5px;
+}
+.add-category-button{
+    width: 140px;
+    height: 30px;
+    border-radius: 10px;
+    color: #272D43;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    margin-left: 14px;
+    margin-top: 20px;
+}
+.registration-form select{
+    display: flex;
+}
+.registration-form textarea{
+    display: flex;
+}
+.edit-profile{
+    width: 140px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: white;
+    color: #272D43;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    padding-top: 7px;
+    margin-left: 370px;
+    margin-top: 8px;
+}
+.edit-profile:visited{
+    color: #272D43;
+}
+.my-profile{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+.my-profile a{
+    color: rgb(193, 154, 154);
+    font-family: 'Poppins', sans-serif;
+}
+.my-profile img{
+    width: 150px;
+    height: 150px;
 }

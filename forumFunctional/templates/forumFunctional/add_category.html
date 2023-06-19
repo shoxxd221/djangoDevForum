@@ -1,9 +1,12 @@
 {% extends 'forumFunctional/base.html' %}
 
 {% block content %}
-    <form method="post">
+    <form method="post" class="add-category-form">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add category</button>
+        {% for f in form %}
+            <p><label for="f.id_for_label">{{ f.label }}</label>{{ f }}</p>
+            <div>{{ f.errors }}</div>
+        {% endfor %}
+        <button type="submit" class="add-category-button">Add category</button>
     </form>
 {% endblock %}

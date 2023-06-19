@@ -59,17 +59,13 @@ class Register(UserPassesTestMixin, DataMixin, CreateView):
         return not self.request.user.is_authenticated
 
 
-class About(TemplateView):
+class About(DataMixin, TemplateView):
     template_name = 'forumFunctional/about.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Registration')
+        c_def = self.get_user_context(title='About')
         return dict(list(context.items()) + list(c_def.items()))
-
-
-def Threads(request):
-    return HttpResponse('Threads page')
 
 
 class AddPost(LoginRequiredMixin, DataMixin, CreateView):
@@ -126,7 +122,7 @@ class MyProfile(LoginRequiredMixin, DataMixin, TemplateView):
         for i in comments:
             if i.user_id == self.request.user.pk:
                 commented_posts.append(Post.objects.get(user_id=i.user_id))
-        context['commented_posts'] = commented_posts
+        context['commented_posts'] = list(set(commented_posts))
         c_def = self.get_user_context(title='My profile')
         return dict(list(context.items()) + list(c_def.items()))
 
@@ -146,7 +142,7 @@ class EditProfile(LoginRequiredMixin, DataMixin, UpdateView):
 
     def form_valid(self, form):
         form.save()
-        return redirect('my_profile')
+        return redirect('profile')
 
 
 def logout_user(request):

@@ -2,24 +2,34 @@
 {% load static %}
 
 {% block content %}
-    <div class="my_profile">
+    <div class="my-profile">
         {% if user.photo %}
             <img src="{{ user.photo.url }}" alt="Avatar">
         {% else %}
             <img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="Avatar">
         {% endif %}
-        {{ user.username }}
-        {{ user.first_name }}
-        {{ user.last_name }}
-        {{ user.date_joined|date:"DATETIME_FORMAT" }}
+            <p>Username: {{ user.username }}</p>
+        {% if user.first_name %}
+            <p>First name: {{ user.first_name }}</p>
+        {% else %}
+            <p>You have no first name</p>
+        {% endif %}
+        {% if user.last_name %}
+            <p>Last name: {{ user.last_name }}</p>
+        {% else %}
+            <p>You have no last name</p>
+        {% endif %}
+        <p>Date of registration: {{ user.date_joined|date:"DATETIME_FORMAT" }}</p>
+        <p>Posts which you created: </p>
         {% for post in posts %}
             {% if post.user_id == user.id %}
                 <a href="#">{{ post.title }}</a>
             {% endif %}
         {% endfor %}
+        <p>Post which you commented</p>
         {% for post in commented_posts %}
             <a href="#">{{ post.title }}</a>
         {% endfor %}
-        <a href="{% url 'edit_profile' %}">Edit profile</a>
+        <a href="{% url 'edit_profile' %}" class="edit-profile">Edit profile</a>
     </div>
 {% endblock %}
