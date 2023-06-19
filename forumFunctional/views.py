@@ -37,10 +37,6 @@ class Categories(DataMixin, TemplateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-def ShowCategories(request):
-    return HttpResponse('Categories page')
-
-
 def ShowCategory(request, category_slug):
     return HttpResponse(f'This is a {category_slug}')
 
@@ -63,8 +59,13 @@ class Register(UserPassesTestMixin, DataMixin, CreateView):
         return not self.request.user.is_authenticated
 
 
-def About(request):
-    return HttpResponse('About page')
+class About(TemplateView):
+    template_name = 'forumFunctional/about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Registration')
+        return dict(list(context.items()) + list(c_def.items()))
 
 
 def Threads(request):

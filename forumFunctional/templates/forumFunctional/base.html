@@ -42,9 +42,15 @@
         <div class="left-sidebar">
             <div class="left-links-container">
                 <div class="links-images">
-                    <a href="{% url 'profile' %}">
-                        <img src="{% static 'forumFunctional/images/home.svg' %}" alt="Profile">
-                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}">
+                            <img src="{% static 'forumFunctional/images/home.svg' %}" alt="Profile">
+                        </a>
+                    {% else %}
+                        <a href="{% url 'registration' %}">
+                            <img src="{% static 'forumFunctional/images/home.svg' %}" alt="Profile">
+                        </a>
+                    {% endif %}
                     <a href="#">
                         <img src="{% static 'forumFunctional/images/Your Threads.svg' %}" alt="Your Threads">
                     </a>
