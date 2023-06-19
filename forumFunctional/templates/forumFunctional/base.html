@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'forumFunctional/css/style.css' %}" type="text/css">
+    <link rel="shortcut icon" href="{% static 'forumFunctional/images/logo.png' %}" type="image/x-icon"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="{% url 'home' %}">
+            <img src="{% static 'forumFunctional/images/logo.png' %}" alt="logo" class="logo">
+        </a>
+        <span class="site">
+            <a href="{% url 'home' %}" class="site-url">developmentForum</a>
+            <p class="site-description">Platform Discussion</p>
+        </span>
+        <nav>
+            {% for item in menu %}
+                <a href="{% url item.url_name %}" class="menu-item">{{ item.title }}</a>
+            {% endfor %}
+            {% if user.is_staff %}
+                <a href="{% url 'add_category' %}">Add category</a>
+            {% endif %}
+        </nav>
+            {% if user.is_authenticated %}
+                <p class="logout"><a href="{% url 'profile' %}">{{ request.user.username }}</a>|<a href="{% url 'logout' %}">Logout</a></p>
+            {% else %}
+                <div class="auth">
+                    <a href="{% url 'login' %}">Login</a>
+                    <a href="{% url 'registration' %}"> Register</a>
+                </div>
+            {% endif %}
+    </header>
+    <main>
+        <div class="left-sidebar">
+            <div class="left-links-container">
+                <div class="links-images">
+                    <a href="{% url 'profile' %}">
+                        <img src="{% static 'forumFunctional/images/home.svg' %}" alt="Profile">
+                    </a>
+                    <a href="#">
+                        <img src="{% static 'forumFunctional/images/Your Threads.svg' %}" alt="Your Threads">
+                    </a>
+                </div>
+                <div class="links">
+                    <a href="{% url 'profile' %}">Profile</a>
+                    <a href="#">Your Threads</a>
+                </div>
+            </div>
+            <footer class="footer-text">
+                ©2023 developmentForum. All rights reserved.
+            </footer>
+        </div>
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="right-sidebar">
+            <div class="list-of-users">
+                <p>List of Users</p>
+                {% for user in users %}
+                    {% if forloop.counter < 6 %}
+                        <div class="user">
+                            {% if user.photo %}
+                                <a href="#"><img src="{{ user.photo.url }}" alt="Фото профиля"></a>
+                                <a href="#" class="username">{{ user.username }}</a>
+                            {% else %}
+                                <a href="#"><img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="Фото профиля"></a>
+                                <a href="#" class="username">{{ user.username }}</a>
+                            {% endif %}
+                        </div>
+                    {% elif forloop.counter == 6 %}
+                        <a href="#" class="see-more">See more</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>
