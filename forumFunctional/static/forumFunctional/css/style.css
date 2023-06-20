@@ -197,13 +197,23 @@ button{
     border: none;
 }
 .threads{
+    background-color: white;
+    color: #272D43;
     width: 200px;
-    height: 50px;
+    height: 40px;
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
     border-radius: 6px;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 18px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.threads:visited{
+    color: #272D43;
 }
 .threads:hover{
     background-color:rgb(101, 119, 156);
@@ -355,4 +365,50 @@ button{
 .my-profile img{
     width: 150px;
     height: 150px;
+}
+.category-link{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+.categories-container{
+    margin-left: 40px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.category-container{
+    display: flex;
+    gap: 20px;
+}
+.category-p{
+    color: rgb(193, 154, 154);
+    font-family: 'Poppins', sans-serif;
+}
+.posts{
+    display: flex;
+    flex-direction: column;
+    margin-left: 40px;
+    margin-top: 40px;
+    gap: 20px;
+}
+.post{
+    text-align: left;
+}
+.post-title{
+    color: rgb(87, 200, 170);
+    font-family: 'Poppins';
+    font-weight: 600;
+}
+.post-content{
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+.posts hr{
+    margin-left: 0px;
+    width: 90%;
+}
+.creator{
+    color: rgb(193, 154, 154);
+    font-family: 'Poppins', sans-serif;
 }

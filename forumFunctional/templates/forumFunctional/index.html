@@ -5,7 +5,5 @@
     <p class="dev-forum">developmentForum</p>
     <p class="welcome-text">Welcome to Discussion with anyone, You can say anything #FreeSpeech.</p>
     <img src="{% static 'forumFunctional/images/illustration.png' %}" alt="illustration">
-    <form action="{% url 'categories' %}">
-        <button class="threads">Go to #Categories</button>
-    </form>
+    <a href="{% url 'posts' %}" class="threads">Go to #Posts</a>
 {% endblock %}

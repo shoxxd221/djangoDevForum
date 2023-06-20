@@ -37,6 +37,16 @@ class Categories(DataMixin, TemplateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
+class Posts(DataMixin, TemplateView):
+    template_name = 'forumFunctional/posts.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['posts'] = Post.objects.all()
+        c_def = self.get_user_context(title='Posts')
+        return dict(list(context.items()) + list(c_def.items()))
+
+
 def ShowCategory(request, category_slug):
     return HttpResponse(f'This is a {category_slug}')
 

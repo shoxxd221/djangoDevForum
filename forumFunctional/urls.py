@@ -10,6 +10,7 @@ urlpatterns = [
     path('categories/', Categories.as_view(), name='categories'),
     path('category/<slug:category_slug>/', ShowCategory, name='category'),
     path('category/<slug:category_slug>/<slug:post_slug>/', ShowPost, name='post'),
+    path('posts/', Posts.as_view(), name='posts'),
     path('login/', Login.as_view(), name='login'),
     path('logout/', logout_user, name='logout'),
     path('about/', About.as_view(), name='about'),
