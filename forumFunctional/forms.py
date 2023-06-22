@@ -7,7 +7,7 @@ from .models import *
 class AddPostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ('title', 'slug', 'category', 'content', 'photo')
 
 
 class AddCategoryForm(forms.ModelForm):

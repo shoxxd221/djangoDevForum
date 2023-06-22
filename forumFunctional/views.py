@@ -83,6 +83,10 @@ class AddPost(LoginRequiredMixin, DataMixin, CreateView):
     template_name = 'forumFunctional/add_post.html'
     success_url = reverse_lazy('home')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Add post')
