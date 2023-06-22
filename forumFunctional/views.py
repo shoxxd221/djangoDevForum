@@ -108,6 +108,26 @@ class AddCategory(LoginRequiredMixin, DataMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class MyPosts(LoginRequiredMixin, DataMixin, TemplateView):
+    template_name = 'forumFunctional/my_posts.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['posts'] = Post.objects.filter(user=self.request.user)
+        c_def = self.get_user_context(title='My posts')
+        return dict(list(context.items()) + list(c_def.items()))
+
+
+class AllUsers(DataMixin, TemplateView):
+    template_name = 'forumFunctional/all_users.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['users'] = User.objects.all()
+        c_def = self.get_user_context(title='All users')
+        return dict(list(context.items()) + list(c_def.items()))
+
+
 class Login(UserPassesTestMixin, DataMixin, LoginView):
     form_class = LoginForm
     template_name = 'forumFunctional/login.html'

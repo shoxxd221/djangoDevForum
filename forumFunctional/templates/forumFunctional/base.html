@@ -61,7 +61,7 @@
                     {% else %}
                         <a href="{% url 'registration' %}">Profile</a>
                     {% endif %}
-                    <a href="#">Your Posts</a>
+                    <a href="{% url 'my_posts' %}">Your Posts</a>
                 </div>
             </div>
             <footer class="footer-text">
@@ -79,15 +79,15 @@
                     {% if forloop.counter < 6 %}
                         <div class="user">
                             {% if user.photo %}
-                                <a href="#"><img src="{{ user.photo.url }}" alt="Фото профиля"></a>
+                                <a href="#"><img src="{{ user.photo.url }}" alt="Profile photo"></a>
                                 <a href="#" class="username">{{ user.username }}</a>
                             {% else %}
-                                <a href="#"><img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="Фото профиля"></a>
+                                <a href="#"><img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="Profile photo"></a>
                                 <a href="#" class="username">{{ user.username }}</a>
                             {% endif %}
                         </div>
                     {% elif forloop.counter == 6 %}
-                        <a href="#" class="see-more">See more</a>
+                        <a href="{% url 'all_users' %}" class="see-more">See more</a>
                     {% endif %}
                 {% endfor %}
             </div>

@@ -1,0 +1,16 @@
+{% extends 'forumFunctional/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="all-users">
+        {% for user in users %}
+            {% if user.photo %}
+                <a href="#"><img src="{{ user.photo.url }}" alt="User photo"></a>
+            {% else %}
+                <a href="#"><img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="User photo"></a>
+            {% endif %}
+            <a href="#">{{ user.username }}</a>
+            <hr>
+        {% endfor %}
+    </div>
+{% endblock %}
