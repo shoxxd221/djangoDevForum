@@ -4,7 +4,12 @@
     <div class="my-posts">
         {% if posts %}
             {% for post in posts %}
-                <p>Post name: <a href="#">{{ post.title }}</a> | Time created: {{ post.time_create }} | Time update: {{ post.time_update }}</p>
+                {% if not post.photo %}
+                    <p>Post name: <a href="#">{{ post.title }}</a> | Time created: {{ post.time_create }} | Time update: {{ post.time_update }}</p>
+                {% else %}
+                    <img src="{{ post.photo.url }}" alt="Post photo">
+                    <p>Post name: <a href="#">{{ post.title }}</a> | Time created: {{ post.time_create }} | Time update: {{ post.time_update }}</p>
+                {% endif %}
             {% endfor %}
         {% else %}
             <h1>You have no posts</h1>

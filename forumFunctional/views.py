@@ -1,9 +1,10 @@
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.decorators import method_decorator
@@ -37,14 +38,18 @@ class Categories(DataMixin, TemplateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-class Posts(DataMixin, TemplateView):
+class Posts(DataMixin, ListView):
     template_name = 'forumFunctional/posts.html'
+    context_object_name = 'posts'
+    paginate_by = 4
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.all()
         c_def = self.get_user_context(title='Posts')
         return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        return Post.objects.all()
 
 
 def ShowCategory(request, category_slug):
@@ -118,14 +123,18 @@ class MyPosts(LoginRequiredMixin, DataMixin, TemplateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-class AllUsers(DataMixin, TemplateView):
+class AllUsers(DataMixin, ListView):
     template_name = 'forumFunctional/all_users.html'
+    context_object_name = 'all_users'
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['users'] = User.objects.all()
         c_def = self.get_user_context(title='All users')
         return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        return User.objects.all()
 
 
 class Login(UserPassesTestMixin, DataMixin, LoginView):

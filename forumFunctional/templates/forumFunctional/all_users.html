@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="all-users">
-        {% for user in users %}
+        {% for user in all_users %}
             {% if user.photo %}
                 <a href="#"><img src="{{ user.photo.url }}" alt="User photo"></a>
             {% else %}
@@ -11,6 +11,11 @@
             {% endif %}
             <a href="#">{{ user.username }}</a>
             <hr>
+        {% endfor %}
+    </div>
+    <div class="posts-pagination">
+        {% for p in paginator.page_range %}
+            <a href="?page={{ p }}">{{ p }}</a>
         {% endfor %}
     </div>
 {% endblock %}
