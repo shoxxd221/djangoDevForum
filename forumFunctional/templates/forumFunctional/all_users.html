@@ -13,9 +13,11 @@
             <hr>
         {% endfor %}
     </div>
-    <div class="posts-pagination">
-        {% for p in paginator.page_range %}
-            <a href="?page={{ p }}">{{ p }}</a>
-        {% endfor %}
-    </div>
+    {% if paginator.num_pages > 1 %}
+        <div class="posts-pagination">
+            {% for p in paginator.page_range %}
+                <a href="?page={{ p }}">{{ p }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

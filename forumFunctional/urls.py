@@ -6,11 +6,12 @@ from .views import *
 
 
 urlpatterns = [
-    path('', ForumView.as_view(), name='home'),
-    path('categories/', Categories.as_view(), name='categories'),
-    path('category/<slug:category_slug>/', ShowCategory, name='category'),
-    path('category/<slug:category_slug>/<slug:post_slug>/', ShowPost, name='post'),
-    path('posts/', Posts.as_view(), name='posts'),
+    path('', Index.as_view(), name='home'),
+    path('categories/', AllCategories.as_view(), name='categories'),
+    path('category/<slug:category_slug>/', PostsByCategory.as_view(), name='category'),
+    path('category/<slug:category_slug>/<slug:post_slug>/', ShowPost.as_view(), name='post'),
+    path('user/<slug:user_slug>', ShowUser.as_view(), name='user'),
+    path('posts/', AllPosts.as_view(), name='posts'),
     path('my_posts/', MyPosts.as_view(), name='my_posts'),
     path('all_users/', AllUsers.as_view(), name='all_users'),
     path('login/', Login.as_view(), name='login'),
@@ -20,7 +21,7 @@ urlpatterns = [
     path('add_post/', AddPost.as_view(), name='add_post'),
     path('add_category/', AddCategory.as_view(), name='add_category'),
     path('my_profile/', MyProfile.as_view(), name='profile'),
-    path('edit_profile/', EditProfile.as_view(), name='edit_profile')
+    path('edit_profile/', EditMyProfile.as_view(), name='edit_profile')
 ]
 
 if settings.DEBUG:

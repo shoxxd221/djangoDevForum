@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
@@ -13,6 +14,9 @@ class User(AbstractUser):
 
     class Meta:
         ordering = ['username']
+
+    def get_absolute_url(self):
+        return reverse('user', kwargs={'user_slug': self.username})
 
 
 class Category(models.Model):
@@ -83,8 +87,11 @@ class Post(models.Model):
     class Meta:
         ordering = ['title']
 
+    def __str__(self):
+        return self.title
+
     def get_absolute_url(self):
-        return reverse('post', kwargs={'post_slug': self.slug})
+        return reverse('post', kwargs={'category_slug': self.category.slug ,'post_slug': self.slug})
 
 
 class Comment(models.Model):
@@ -100,13 +107,16 @@ class Comment(models.Model):
         Post,
         on_delete=models.CASCADE,
         db_index=True,
-        verbose_name='Post id'
+        verbose_name='Post title'
     )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='User id'
+        verbose_name='Username'
     )
 
     class Meta:
         ordering = ['post']
+
+    def __str__(self):
+        return f"{self.user.username} commented {self.post.title}"

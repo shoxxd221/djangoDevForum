@@ -1,6 +1,5 @@
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
-from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -19,7 +18,7 @@ def is_staff(user):
     return user.is_authenticated and user.is_staff
 
 
-class ForumView(DataMixin, TemplateView):
+class Index(DataMixin, TemplateView):
     template_name = 'forumFunctional/index.html'
 
     def get_context_data(self, **kwargs):
@@ -28,7 +27,7 @@ class ForumView(DataMixin, TemplateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-class Categories(DataMixin, TemplateView):
+class AllCategories(DataMixin, TemplateView):
     template_name = 'forumFunctional/categories.html'
 
     def get_context_data(self, **kwargs):
@@ -38,7 +37,7 @@ class Categories(DataMixin, TemplateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-class Posts(DataMixin, ListView):
+class AllPosts(DataMixin, ListView):
     template_name = 'forumFunctional/posts.html'
     context_object_name = 'posts'
     paginate_by = 4
@@ -49,15 +48,29 @@ class Posts(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        return Post.objects.all()
+        return Post.objects.select_related('user').all()
 
 
-def ShowCategory(request, category_slug):
-    return HttpResponse(f'This is a {category_slug}')
+class PostsByCategory(DataMixin, TemplateView):
+    template_name = 'forumFunctional/category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = Category.objects.get(slug=self.kwargs.get("category_slug"))
+        context['posts'] = Post.objects.select_related('category').filter(category=category)
+        c_def = self.get_user_context(title=f'Posts of {category.title} category')
+        return dict(list(context.items()) + list(c_def.items()))
 
 
-def ShowPost(request, category_slug, post_slug):
-    return HttpResponse(f'url = {category_slug}/{post_slug}')
+class ShowPost(DataMixin, TemplateView):
+    template_name = 'forumFunctional/post.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = Post.objects.select_related('user').get(slug=self.kwargs.get("post_slug"))
+        context['post'] = post
+        c_def = self.get_user_context(title=post.title)
+        return dict(list(context.items()) + list(c_def.items()))
 
 
 class Register(UserPassesTestMixin, DataMixin, CreateView):
@@ -74,12 +87,59 @@ class Register(UserPassesTestMixin, DataMixin, CreateView):
         return not self.request.user.is_authenticated
 
 
-class About(DataMixin, TemplateView):
-    template_name = 'forumFunctional/about.html'
+class Login(UserPassesTestMixin, DataMixin, LoginView):
+    form_class = LoginForm
+    template_name = 'forumFunctional/login.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='About')
+        c_def = self.get_user_context(title='Login')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+    def test_func(self):
+        return not self.request.user.is_authenticated
+
+
+class MyProfile(LoginRequiredMixin, DataMixin, TemplateView):
+    template_name = 'forumFunctional/my_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['posts'] = Post.objects.select_related('category').filter(user=user)
+        comments = Comment.objects.select_related('post__category').filter(user=user)
+        context['commented_posts'] = [comment.post for comment in comments]
+        c_def = self.get_user_context(title='My profile')
+        return dict(list(context.items()) + list(c_def.items()))
+
+
+class EditMyProfile(LoginRequiredMixin, DataMixin, UpdateView):
+    form_class = EditUserForm
+    template_name = 'forumFunctional/edit_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Edit profile')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_object(self):
+        return User.objects.get(pk=self.request.user.pk)
+
+    def form_valid(self, form):
+        form.save()
+        return redirect('profile')
+
+
+class MyPosts(LoginRequiredMixin, DataMixin, TemplateView):
+    template_name = 'forumFunctional/my_posts.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['posts'] = Post.objects.select_related('category').filter(user=self.request.user)
+        c_def = self.get_user_context(title='My posts')
         return dict(list(context.items()) + list(c_def.items()))
 
 
@@ -113,16 +173,6 @@ class AddCategory(LoginRequiredMixin, DataMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class MyPosts(LoginRequiredMixin, DataMixin, TemplateView):
-    template_name = 'forumFunctional/my_posts.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.filter(user=self.request.user)
-        c_def = self.get_user_context(title='My posts')
-        return dict(list(context.items()) + list(c_def.items()))
-
-
 class AllUsers(DataMixin, ListView):
     template_name = 'forumFunctional/all_users.html'
     context_object_name = 'all_users'
@@ -137,55 +187,26 @@ class AllUsers(DataMixin, ListView):
         return User.objects.all()
 
 
-class Login(UserPassesTestMixin, DataMixin, LoginView):
-    form_class = LoginForm
-    template_name = 'forumFunctional/login.html'
+class ShowUser(DataMixin, TemplateView):
+    template_name = 'forumFunctional/user.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Login')
+        user = User.objects.get(username=self.kwargs.get('user_slug'))
+        context['posts'] = Post.objects.select_related('category').filter(user=user)
+        comments = Comment.objects.select_related('post__category').filter(user=user)
+        context['commented_posts'] = [comment.post for comment in comments]
+        c_def = self.get_user_context(title=user.username)
         return dict(list(context.items()) + list(c_def.items()))
 
-    def get_success_url(self):
-        return reverse_lazy('home')
 
-    def test_func(self):
-        return not self.request.user.is_authenticated
-
-
-class MyProfile(LoginRequiredMixin, DataMixin, TemplateView):
-    template_name = 'forumFunctional/my_profile.html'
+class About(DataMixin, TemplateView):
+    template_name = 'forumFunctional/about.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.all()
-        comments = Comment.objects.filter(user_id=self.request.user.pk)
-        # Get list of commented posts
-        commented_posts = []
-        for i in comments:
-            if i.user_id == self.request.user.pk:
-                commented_posts.append(Post.objects.get(user_id=i.user_id))
-        context['commented_posts'] = list(set(commented_posts))
-        c_def = self.get_user_context(title='My profile')
+        c_def = self.get_user_context(title='About')
         return dict(list(context.items()) + list(c_def.items()))
-
-
-class EditProfile(LoginRequiredMixin, DataMixin, UpdateView):
-    model = User
-    form_class = EditUserForm
-    template_name = 'forumFunctional/edit_profile.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Edit profile')
-        return dict(list(context.items()) + list(c_def.items()))
-
-    def get_object(self):
-        return User.objects.get(pk=self.request.user.pk)
-
-    def form_valid(self, form):
-        form.save()
-        return redirect('profile')
 
 
 def logout_user(request):

@@ -1,0 +1,33 @@
+{% extends 'forumFunctional/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="user-profile">
+    {% if user.photo %}
+        <img src="{{ user.photo.url }}" alt="User photo">
+    {% else %}
+        <img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="">
+    {% endif %}
+    <p>Username: {{ user.username }}</p>
+    {% if user.first_name %}
+        <p>{{ user.username }} first name: {{ user.first_name }}</p>
+    {% else %}
+        <p>{{ user.username }} has no first name</p>
+    {% endif %}
+    {% if user.last_name %}
+        <p>{{ user.username }} first name: {{ user.last_name }}</p>
+    {% else %}
+        <p>{{ user.username }} has no last name</p>
+    {% endif %}
+    <p>Date of registration: {{ user.date_joined }}</p>
+    <p>Time of last login: {{ user.last_login }}</p>
+    <p>Posts which he created: </p>
+    {% for post in posts %}
+        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+    {% endfor %}
+    <p>Posts which he commented: </p>
+    {% for post in commented_posts %}
+        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+    {% endfor %}
+</div>
+{% endblock %}

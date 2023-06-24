@@ -1,1 +1,21 @@
 {% extends 'forumFunctional/base.html' %}
+
+{% block content %}
+    <div class="posts-by-category">
+        {% for post in posts %}
+            <div>
+                <p>Post name: <a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
+                <p>Content: {{ post.content|truncatewords:30 }}</p>
+                <p>Time create: {{ post.time_create }}</p>
+                <hr>
+            </div>
+        {% endfor %}
+    </div>
+    {% if paginator.num_pages > 1 %}
+        <div class="posts-pagination">
+            {% for p in paginator.page_range %}
+                <a href="?page={{ p }}">{{ p }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -13,8 +13,10 @@ class UserAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'time_create', 'category_id', 'user_id', 'time_update')
     search_fields = ('id', 'title', 'time_create', 'category_id', 'user_id', 'time_update')
-    list_filter = ('title', )
+    list_filter = ('title', 'time_create')
 
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Post, PostAdmin)
+admin.site.register(Category)
+admin.site.register(Comment)

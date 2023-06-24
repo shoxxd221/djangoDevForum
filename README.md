@@ -25,7 +25,7 @@ This is a forum for developers, created using the Django framework and SQLite da
 4. Activate the virtual environment:
 
    
-   source venv/bin/activate
+   venv\Scripts\activate
    
 
 5. Install the dependencies:

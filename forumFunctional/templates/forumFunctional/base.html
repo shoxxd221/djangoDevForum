@@ -79,12 +79,11 @@
                     {% if forloop.counter < 6 %}
                         <div class="user">
                             {% if user.photo %}
-                                <a href="#"><img src="{{ user.photo.url }}" alt="Profile photo"></a>
-                                <a href="#" class="username">{{ user.username }}</a>
+                                <a href="{{ user.get_absolute_url }}"><img src="{{ user.photo.url }}" alt="Profile photo"></a>
                             {% else %}
-                                <a href="#"><img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="Profile photo"></a>
-                                <a href="#" class="username">{{ user.username }}</a>
+                                <a href="{{ user.get_absolute_url }}"><img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="Profile photo"></a>
                             {% endif %}
+                            <a href="{{ user.get_absolute_url }}" class="username">{{ user.username }}</a>
                         </div>
                     {% elif forloop.counter == 6 %}
                         <a href="{% url 'all_users' %}" class="see-more">See more</a>

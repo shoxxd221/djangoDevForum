@@ -1,0 +1,13 @@
+{% extends 'forumFunctional/base.html' %}
+
+{% block content %}
+    <div class="post-selected">
+        <h1>{{ post.title }}</h1>
+        {% if post.photo %}
+            <img src="{{ post.photo.url }}" alt="Post photo">
+        {% endif %}
+        <p>Post content: {{ post.content }}</p>
+        <p>Time create: {{ post.time_create }}</p>
+        <p>Username: <a href="#">{{ post.user.username }}</a></p>
+    </div>
+{% endblock %}
