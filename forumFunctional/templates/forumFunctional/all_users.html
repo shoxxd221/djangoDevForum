@@ -5,11 +5,11 @@
     <div class="all-users">
         {% for user in all_users %}
             {% if user.photo %}
-                <a href="#"><img src="{{ user.photo.url }}" alt="User photo"></a>
+                <a href="{{ user.get_absolute_url }}"><img src="{{ user.photo.url }}" alt="User photo"></a>
             {% else %}
-                <a href="#"><img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="User photo"></a>
+                <a href="{{ user.get_absolute_url }}"><img src="{% static 'forumFunctional/images/default-avatar.png' %}" alt="User photo"></a>
             {% endif %}
-            <a href="#">{{ user.username }}</a>
+            <a href="{{ user.get_absolute_url }}">{{ user.username }}</a>
             <hr>
         {% endfor %}
     </div>

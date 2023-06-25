@@ -7,9 +7,9 @@
                 {% if post.photo %}
                     <img src="{{ post.photo.url }}" alt="Post photo">
                 {% endif %}
-                <a href="#"><h2 class="post-title">{{ post.title }}</h2></a>
+                <a href="{{ post.get_absolute_url }}"><h2 class="post-title">{{ post.title }}</h2></a>
                 <p class="post-content">{{ post.content|truncatewords:30 }}</p>
-                <p class="creator">Creator: <a href="#">{{ post.user.username }}</a></p>
+                <p class="creator">Creator: <a href="{{ post.user.get_absolute_url }}">{{ post.user.username }}</a></p>
                 <p class="creator">Date of creation: {{ post.time_create|date:"DATETIME_FORMAT" }}</p>
             </div>
         <hr>

@@ -16,6 +16,12 @@ class AddCategoryForm(forms.ModelForm):
         fields = '__all__'
 
 
+class AddCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('content', )
+
+
 class RegistrationForm(UserCreationForm):
     username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'form-input'}))
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-input'}))

@@ -8,6 +8,23 @@
         {% endif %}
         <p>Post content: {{ post.content }}</p>
         <p>Time create: {{ post.time_create }}</p>
-        <p>Username: <a href="#">{{ post.user.username }}</a></p>
+        <p>Username: <a href="{{ post.user.get_absolute_url }}">{{ post.user.username }}</a></p>
+    </div>
+    <div class="comments">
+        {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add comment!</button>
+        </form>
+        {% endif %}
+        {% for comment in comments %}
+            <p>Comment content: {{ comment.content }}   |   Creator:
+                {% if request.user.pk == comment.user.pk %}
+                    <a href="{% url 'profile' %}">{{ comment.user }}</a></p>
+                {% else %}
+                    <a href="{{ comment.user.get_absolute_url }}">{{ comment.user }}</a></p>
+                {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}

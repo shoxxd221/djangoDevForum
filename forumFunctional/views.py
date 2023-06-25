@@ -1,5 +1,6 @@
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView
@@ -47,7 +48,7 @@ class AllPosts(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        return Post.objects.select_related('user').all()
+        return Post.objects.select_related('user', 'category').all()
 
 
 class PostsByCategory(DataMixin, TemplateView):
@@ -61,15 +62,28 @@ class PostsByCategory(DataMixin, TemplateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-class ShowPost(DataMixin, TemplateView):
+class ShowPost(DataMixin, CreateView):
+    form_class = AddCommentForm
     template_name = 'forumFunctional/post.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = Post.objects.select_related('user').get(slug=self.kwargs.get("post_slug"))
         context['post'] = post
+        context['comments'] = Comment.objects.select_related('user').filter(post_id=post.pk)
         c_def = self.get_user_context(title=post.title)
         return dict(list(context.items()) + list(c_def.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('post', kwargs={'category_slug': self.object.post.category.slug, 'post_slug': self.object.post.slug})
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.post = Post.objects.get(slug=self.kwargs['post_slug'])
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
 
 
 class Register(UserPassesTestMixin, DataMixin, CreateView):
