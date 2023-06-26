@@ -57,9 +57,7 @@ class Post(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        verbose_name='Name of category',
-        blank=True,
-        null=True
+        verbose_name='Name of category'
     )
     content = models.TextField(
         verbose_name='Content of post'

@@ -85,7 +85,6 @@ class ShowPost(DataMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-
 class Register(UserPassesTestMixin, DataMixin, CreateView):
     form_class = RegistrationForm
     template_name = 'forumFunctional/registration.html'
