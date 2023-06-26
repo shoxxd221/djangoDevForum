@@ -205,6 +205,7 @@ class ShowUser(DataMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = User.objects.get(username=self.kwargs.get('user_slug'))
+        context['user'] = user
         context['posts'] = Post.objects.select_related('category').filter(user=user)
         comments = Comment.objects.select_related('post__category').filter(user=user)
         context['commented_posts'] = [comment.post for comment in comments]
